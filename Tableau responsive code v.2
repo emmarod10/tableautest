@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+///////////////////////////////////////////// for copy pasting into html page (or embedding should work)
+<div> 
+
+	 <style>="{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin:0;
+	padding:0;
+	border:0;
+}"
+	></style>
+
+	<script src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
+	<script>
+		//1. place to hold dashboard
+const vizContainer = document.getElementbyID("vizContainer");
+//2. URL for fixed sized dashboard
+const fixedURL= src "https://public.tableau.com/views/MapofPetitionSpots/MapDisplay?:language=en-US&:display_count=n&:origin=viz_share_link"
+
+let viz;
+const options = {
+	height: window.innerHeight,
+	width: window.innerWidth,
+	onFirstInteractive: () => {
+		console.log('Viz has loaded');
+	},
+};
+
+//when page loads, we want to see the dashboard
+function inititViz(){
+	viz = new tableau.Viz(vizContainer, fixedURL, options);
+}
+
+function autoResize() {
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+	viz.setFrameSize(width,height);
+}
+
+function reSizeFixedDashboard() {
+	const sheet= viz.getWorkbook().getActiveSheet()
+	sheet.changeSizeAsync(
+	{
+		behavior: "EXACTLY",
+		maxSize: {
+			height: window.innerHeight, width: window.innerWidth
+		}
+	).then(viz.setFrameSize(window.innerWidth,window.innerHeight));
+	}
+}
+
+window.addEventListener('resize', () =>{
+	console.log('Resizing the window ${window.innerHeight}, ${window.innerWidth}');
+	reSizeFixedDashboard();
+});
+document.addEventListener("DOMContentLoaded", inititViz());
+	</script>
+</div>
+
